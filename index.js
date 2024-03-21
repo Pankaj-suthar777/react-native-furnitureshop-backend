@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const port = 3000;
+const productRouter = require("./routes/product");
 
 dotenv.config();
 mongoose
@@ -12,5 +13,12 @@ mongoose
     console.log("DB connection failed", err);
   });
 
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+app.use("/api/products", productRouter);
+
 app.get("/", (req, res) => res.send("Hello World!"));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(process.env.PORT || port, () =>
+  console.log(`Example app listening on port ${process.env.PORT}!`)
+);
